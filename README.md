@@ -1,47 +1,66 @@
 # Statix
 
-Statix is a minimal x86 **unikernel** built from scratch, aiming to bundle the application and kernel into a single, bootable binary image.
+Statix is a small 32-bit x86 kernel and BIOS boot path built from scratch.
 
 ## Building
 
-### Build Dependencies:
+### Build Dependencies
 
-- `gcc`
-- `nasm`
-- GNU make
-- GNU binutils
+- `gcc` (with 32-bit support, e.g. `lib32-gcc-libs` or `gcc-multilib`)
+- GNU `make`
+- GNU `binutils` (`as`, `ld`, `objcopy`)
 
-### Runtime Dependencies:
+### Runtime Dependencies
 
-- `qemu`
+- `qemu` (`qemu-system-i386`)
 
-### Getting an image:
+### Building an image
 
 1. Clone this repository:
 
 ```console
 $ git clone https://github.com/reqseq/statix
+$ cd statix
 ```
 
-2. Then compile with:
+2. Build the disk image (`images/statix.img`; objects in `build/`):
 
 ```console
-$ cd src/
-$ make statix
+$ make image
 ```
 
-### Running in a VM
+Useful variables: `V=1`, `KCFLAGS=...`, `KAFLAGS=...`, `LDFLAGS=...`,
+`O=...`, and `KBUILD_OUTPUT=...`.
 
-Run the image in `qemu` with:
+### Running in a VM
 
 ```console
 $ make run
 ```
 
-## Resources | Reference | Inspiration
+### Debugging
+
+Start QEMU waiting for GDB:
+
+```console
+$ make run-debug
+```
+
+Attach from another terminal:
+
+```console
+$ make connect-gdb
+```
+
+### Cleaning
+
+```console
+$ make clean
+```
+
+## References
 
 - [OSDev wiki](https://osdev.wiki/wiki/Expanded_Main_Page)
-- [The Linux Kernel](https://kernel.org/)
 - [Unikraft](https://unikraft.org/)
 - [os-tutorial](https://github.com/cfenollosa/os-tutorial)
 - [Writing a Simple Operating System — from Scratch](https://angom.myweb.cs.uwindsor.ca/teaching/cs330/WritingOS.pdf) by Nick Blundell
