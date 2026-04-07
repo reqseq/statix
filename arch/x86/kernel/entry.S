@@ -3,10 +3,13 @@
  */
 
 .code32
-.extern	main
+.extern	kernel_main
 .global	_start
 
 _start:
-	call	main
+	call	kernel_main
+
+.Lhang:
+	cli
 	hlt
-	jmp	.
+	jmp	.Lhang

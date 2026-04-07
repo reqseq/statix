@@ -1,18 +1,36 @@
 #include <io/ports.h>
 
-void main(void)
+enum {
+	VGA_CRTC_INDEX_PORT    = 0x3d4,
+	VGA_CRTC_DATA_PORT     = 0x3d5,
+	VGA_CURSOR_HIGH_REG    = 14,
+	VGA_CURSOR_LOW_REG     = 15,
+	VGA_TEXT_BUFFER        = 0xb8000,
+	VGA_WHITE_ON_BLACK     = 0x0f,
+	VGA_CELL_SIZE          = 2,
+};
+
+static unsigned short vga_cursor_position(void)
 {
-	port_byte_out(0x3d4, 14);
+	unsigned short position;
 
-	int position = port_byte_in(0x3d5);
-	position <<= 8;
+	port_byte_out(VGA_CRTC_INDEX_PORT, VGA_CURSOR_HIGH_REG);
+	position = (unsigned short)port_byte_in(VGA_CRTC_DATA_PORT) << 8;
 
-	port_byte_out(0x3d4, 15);
-	position += port_byte_in(0x3d5);
+	port_byte_out(VGA_CRTC_INDEX_PORT, VGA_CURSOR_LOW_REG);
+	position |= port_byte_in(VGA_CRTC_DATA_PORT);
 
-	int offset_from_vga = position * 2;
+	return position;
+}
 
-	char *vga = (char *)0xb8000;
-	vga[offset_from_vga] = 'X';
-	vga[offset_from_vga + 1] = 0x0f;
+void kernel_main(void)
+{
+	unsigned short offset;
+	volatile unsigned char *vga;
+
+	offset = vga_cursor_position() * VGA_CELL_SIZE;
+	vga = (volatile unsigned char *)VGA_TEXT_BUFFER;
+
+	vga[offset] = 'X';
+	vga[offset + 1] = VGA_WHITE_ON_BLACK;
 }

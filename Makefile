@@ -217,7 +217,7 @@ connect-gdb: $(KERNEL_ELF)
 		-ex "file $(KERNEL_ELF)" \
 		-ex "target remote localhost:$(GDB_PORT)" \
 		-ex "b _start" \
-		-ex "b main"
+		-ex "b kernel_main"
 
 clean:
 	@printf '  CLEAN   %s %s\n' \

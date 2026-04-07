@@ -2,26 +2,26 @@
 
 unsigned char port_byte_in(unsigned short port)
 {
-	unsigned char result;
+	unsigned char value;
 
-	__asm__("in %%dx, %%al" : "=a"(result) : "d"(port));
-	return result;
+	__asm__ volatile("in %%dx, %%al" : "=a"(value) : "d"(port));
+	return value;
 }
 
 void port_byte_out(unsigned short port, unsigned char data)
 {
-	__asm__("out %%al, %%dx" : : "a"(data), "d"(port));
+	__asm__ volatile("out %%al, %%dx" : : "a"(data), "d"(port));
 }
 
 unsigned short port_word_in(unsigned short port)
 {
-	unsigned short result;
+	unsigned short value;
 
-	__asm__("in %%dx, %%ax" : "=a"(result) : "d"(port));
-	return result;
+	__asm__ volatile("in %%dx, %%ax" : "=a"(value) : "d"(port));
+	return value;
 }
 
 void port_word_out(unsigned short port, unsigned short data)
 {
-	__asm__("out %%ax, %%dx" : : "a"(data), "d"(port));
+	__asm__ volatile("out %%ax, %%dx" : : "a"(data), "d"(port));
 }
