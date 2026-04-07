@@ -1,0 +1,7 @@
+-m32
+-ffreestanding
+-fno-pie
+-fno-pic
+-fno-stack-protector
+-fno-omit-frame-pointer
+-Iinclude
