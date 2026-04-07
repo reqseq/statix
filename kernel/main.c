@@ -1,8 +1,18 @@
+#include <io/ports.h>
+
 void main(void)
 {
-	volatile char *video_memory;
+	port_byte_out(0x3d4, 14);
 
-	video_memory = (volatile char *)0xb8000;
+	int position = port_byte_in(0x3d5);
+	position <<= 8;
 
-	video_memory[0] = 'X';
+	port_byte_out(0x3d4, 15);
+	position += port_byte_in(0x3d5);
+
+	int offset_from_vga = position * 2;
+
+	char *vga = (char *)0xb8000;
+	vga[offset_from_vga] = 'X';
+	vga[offset_from_vga + 1] = 0x0f;
 }
